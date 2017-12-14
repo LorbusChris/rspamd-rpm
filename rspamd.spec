@@ -1,12 +1,35 @@
 Name:             rspamd
-Version:          1.6.4
-Release:          2%{?dist}
+Version:          1.6.5
+Release:          1%{?dist}
 Summary:          Rapid spam filtering system
-#TODO: Check Lincenses, Bundles SW
-License:          ASL 2.0
-URL:              https://rspamd.com/
+# aho-corasick (bundled fork): LGPL-3.0
+# ngx-http-parser (bundled fork): MIT
+# lc-btrie (bundled fork): BSD-3-Clause
+# libottery (bundled fork): CC0
+# librdns (bundled): BSD-2-Clause
+# libucl (bundled): BSD-2-Clause
+# moses (bundled): MIT
+# mumhash (bundled): MIT
+# snowball (bundled): BSD-3-Clause
+# t1ha (bundled): Zlib
+# torch (bundled): Apache-2.0, BSD-3-Clause
+## TODO: un-bundle the following:
+# hiredis: BSD-3-Clause
+# lgpl: LGPL-2.1
+# linenoise: BSD-2-Clause
+# lua-lpeg: MIT
+# lua-fun: MIT
+# perl-Mozilla-PublicSuffix: MIT
+# uthash: BSD
+# xxhash: BSD
+# zstd: BSD
+# TODO: Check for bundled js libs
+# TODO: Add required Provides
+License:          ASL 2.0, LGPLv2+, LGPLv3, BSD, MIT, CC0, zlib
+URL:              https://www.rspamd.com/
 
 Source0:          https://github.com/vstakhov/rspamd/archive/%{version}.tar.gz
+Patch0:           %{name}-ssl_cipher_list.patch
 
 %{?systemd_requires}
 BuildRequires:    systemd
@@ -27,10 +50,11 @@ lua.
 
 %prep
 %setup -q
+%patch0 -p1
 rm -rf debian
-#TODO: Patch SSL_CTX_set_cipher_list
 
 %build
+# TODO: Investigate, do we want DEBIAN_BUILD=1? Any other improvements?
 %cmake \
   -DCONFDIR=%{_sysconfdir}/%{name} \
   -DMANDIR=%{_mandir} \
@@ -61,9 +85,10 @@ install -p -D -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}/local.d/
 install -p -D -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}/override.d/
 
 %check
-#TODO: Run Check
+# TODO: Run Tests
 
 %pre
+# TODO: Investigate, do we need a SELinux policy for rspamd?
 getent group %{name} >/dev/null || groupadd -r %{name}
 getent passwd %{name} >/dev/null || \
     useradd -r -g %{name} -d %{_sharedstatedir}/%{name} -s /sbin/nologin \
@@ -134,6 +159,11 @@ exit 0
 %{_mandir}/man1/rspamadm.*
 
 %changelog
+* Thu Dec 14 2017 Christian Glombek <christian.glombek@rwth-aachen.de> 1.6.5-1
+- Update to 1.6.5
+- Add patch to use OpenSSL system profile cipher list
+- Add license information for bundled libraries
+
 * Thu Oct 05 2017 Christian Glombek <christian.glombek@rwth-aachen.de> 1.6.4-2
 - Incorporate Spec Review
 
