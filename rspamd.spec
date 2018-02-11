@@ -1,35 +1,56 @@
 Name:             rspamd
-Version:          1.6.5
+Version:          1.6.6
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
-# aho-corasick (bundled fork): LGPL-3.0
-# ngx-http-parser (bundled fork): MIT
-# lc-btrie (bundled fork): BSD-3-Clause
-# libottery (bundled fork): CC0
-# librdns (bundled): BSD-2-Clause
-# libucl (bundled): BSD-2-Clause
-# moses (bundled): MIT
-# mumhash (bundled): MIT
-# snowball (bundled): BSD-3-Clause
-# t1ha (bundled): Zlib
-# torch (bundled): Apache-2.0, BSD-3-Clause
-## TODO: un-bundle the following:
-# hiredis: BSD-3-Clause
-# lgpl: LGPL-2.1
-# linenoise: BSD-2-Clause
-# lua-lpeg: MIT
-# lua-fun: MIT
-# perl-Mozilla-PublicSuffix: MIT
-# uthash: BSD
-# xxhash: BSD
-# zstd: BSD
-# TODO: Check for bundled js libs
-# TODO: Add required Provides
 License:          ASL 2.0, LGPLv2+, LGPLv3, BSD, MIT, CC0, zlib
 URL:              https://www.rspamd.com/
-
 Source0:          https://github.com/vstakhov/rspamd/archive/%{version}.tar.gz
 Patch0:           %{name}-ssl_cipher_list.patch
+
+# Bundled dependencies
+# TODO: Double-check Provides
+# aho-corasick: LGPL-3.0
+Provides: bundled(aho-corasick)
+# ngx-http-parser: MIT
+Provides: bundled(ngx-http-parser)
+# lc-btrie: BSD-3-Clause
+Provides: bundled(lc-btrie)
+# libottery: CC0
+Provides: bundled(libottery)
+# librdns: BSD-2-Clause
+Provides: bundled(librdns)
+# libucl: BSD-2-Clause
+Provides: bundled(libucl)
+# moses: MIT
+Provides: bundled(moses)
+# mumhash: MIT
+Provides: bundled(mumhash)
+# snowball: BSD-3-Clause
+Provides: bundled(snowball)
+# t1ha: Zlib
+Provides: bundled(t1ha)
+# torch: Apache-2.0, BSD-3-Clause
+Provides: bundled(torch)
+# TODO: If unpatched, un-bundle the following:
+# hiredis: BSD-3-Clause
+Provides: bundled(hiredis)
+# lgpl: LGPL-2.1
+Provides: bundled(lgpl)
+# linenoise: BSD-2-Clause
+Provides: bundled(linenoise)
+# lua-lpeg: MIT
+Provides: bundled(lua-lpeg)
+# lua-fun: MIT
+Provides: bundled(lua-fun)
+# perl-Mozilla-PublicSuffix: MIT
+Provides: bundled(perl-Mozilla-PublicSuffix)
+# uthash: BSD
+Provides: bundled(uthash)
+# xxhash: BSD
+Provides: bundled(xxhash)
+# zstd: BSD
+Provides: bundled(zstd)
+# TODO: Check for bundled js libs
 
 %{?systemd_requires}
 BuildRequires:    systemd
@@ -159,8 +180,8 @@ exit 0
 %{_mandir}/man1/rspamadm.*
 
 %changelog
-* Thu Dec 14 2017 Christian Glombek <christian.glombek@rwth-aachen.de> 1.6.5-1
-- Update to 1.6.5
+* Wed Feb 21 2018 Christian Glombek <christian.glombek@rwth-aachen.de> 1.6.6-1
+- Update to 1.6.6
 - Add patch to use OpenSSL system profile cipher list
 - Add license information for bundled libraries
 
