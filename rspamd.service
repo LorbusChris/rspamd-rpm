@@ -8,8 +8,9 @@ User=rspamd
 Group=rspamd
 NonBlocking=true
 LimitNOFILE=1048576
-PIDFile=/var/run/rspamd.pid
-ExecStart=/usr/bin/rspamd -c /etc/rspamd/rspamd.conf -f
+RuntimeDirectory=rspamd
+PIDFile=%t/rspamd/rspamd.pid
+ExecStart=/usr/bin/rspamd -c /etc/rspamd/rspamd.conf -f -p %t/rspamd/rspamd.pid
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 
