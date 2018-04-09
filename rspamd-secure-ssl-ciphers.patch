@@ -1,12 +1,13 @@
 diff -ru a/src/libutil/util.c b/src/libutil/util.c
---- a/src/libutil/util.c	2017-10-22 18:16:54.000000000 +0200
-+++ b/src/libutil/util.c	2017-12-14 05:26:00.092859244 +0100
-@@ -2144,7 +2144,7 @@
+index b6057f0..22f93d1 100644
+--- a/src/libutil/util.c
++++ b/src/libutil/util.c
+@@ -2125,7 +2125,7 @@ void
  rspamd_config_libs (struct rspamd_external_libs_ctx *ctx,
  		struct rspamd_config *cfg)
  {
 -	static const char secure_ciphers[] = "HIGH:!aNULL:!kRSA:!PSK:!SRP:!MD5:!RC4";
 +	static const char secure_ciphers[] = "PROFILE=SYSTEM";
+ 	size_t r;
  
  	g_assert (cfg != NULL);
- 

@@ -1,15 +1,15 @@
 Name:             rspamd
-Version:          1.6.6
+Version:          1.7.1
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv2+ and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
-Source0:          https://github.com/vstakhov/rspamd/archive/%{version}.tar.gz
+Source0:          https://github.com/vstakhov/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 #Source4:          rspamd-sysusers.conf
-Patch0:           rspamd-1.6.6-ssl_cipher_list.patch
+Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
 BuildRequires:    fann-devel
@@ -153,18 +153,25 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 %{_bindir}/rspamc
 %{_bindir}/rspamd
 %{_bindir}/rspamd_stats
+
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/effective_tld_names.dat
-%dir %{_datadir}/%{name}/lib
-%{_datadir}/%{name}/lib/*.lua
-%dir %{_datadir}/%{name}/lua
-%{_datadir}/%{name}/lua/*.lua
-%dir %{_datadir}/%{name}/rules
-%{_datadir}/%{name}/rules/*.lua
+
+%dir %{_datadir}/%{name}/{elastic,languages}
+%{_datadir}/%{name}/{elastic,languages}/*.json
+
+%dir %{_datadir}/%{name}/{lua,lib,rules}
+%{_datadir}/%{name}/{lua,lib,rules}/*.lua
+
+%dir %{_datadir}/%{name}/lib/{decisiontree,nn,optim,paths,rspamadm,torch}
+%{_datadir}/%{name}/lib/{decisiontree,nn,optim,paths,rspamadm,torch}/*.lua
+
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
+
 %dir %{_datadir}/%{name}/www
 %{_datadir}/%{name}/www/*
+
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
 %{_libdir}/systemd/system-preset/80-rspamd.preset
@@ -177,13 +184,14 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/*.inc
-%dir %{_sysconfdir}/%{name}/local.d
-%dir %{_sysconfdir}/%{name}/modules.d
-%config(noreplace) %{_sysconfdir}/%{name}/modules.d/*
-%dir %{_sysconfdir}/%{name}/override.d
+%dir %{_sysconfdir}/%{name}/{local,modules,override,scores}.d
+%config(noreplace) %{_sysconfdir}/%{name}/{modules,scores}.d/*
 %{_unitdir}/rspamd.service
 
 %changelog
+* Sun Mar 25 2018 evan@eklitzke.org - 1.7.1-1
+- Updated for 1.7.1 release
+
 * Wed Feb 21 2018 Christian Glombek <christian.glombek@rwth-aachen.de> - 1.6.6-1
 - RPM packaging for Rspamd in Fedora
 - Add patch to use OpenSSL system profile cipher list
