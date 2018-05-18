@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          1.7.1
+Version:          1.7.4
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv2+ and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -9,14 +9,16 @@ Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 #Source4:          rspamd-sysusers.conf
-Patch0:           rspamd-secure-ssl-ciphers.patch
+Patch0: rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
 BuildRequires:    fann-devel
 BuildRequires:    file-devel
 BuildRequires:    glib2-devel
 BuildRequires:    gmime-devel
+%ifarch x86_64
 BuildRequires:    hyperscan-devel
+%endif
 BuildRequires:    libaio-devel
 BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
@@ -189,6 +191,10 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 %{_unitdir}/rspamd.service
 
 %changelog
+* Fri May 18 2018 patrick@pichon.me - 1.7.4
+- Updated for 1.7.4 release
+- Make hyperscan-devel only for x86_64 architecure for which the package exist
+
 * Sun Mar 25 2018 evan@eklitzke.org - 1.7.1-1
 - Updated for 1.7.1 release
 
