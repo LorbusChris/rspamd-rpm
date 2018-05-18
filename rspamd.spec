@@ -9,7 +9,7 @@ Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 #Source4:          rspamd-sysusers.conf
-Patch0: rspamd-secure-ssl-ciphers.patch
+Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
 BuildRequires:    fann-devel
