@@ -9,7 +9,7 @@ Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 #Source4:          rspamd-sysusers.conf
-
+Patch0: rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
 BuildRequires:    fann-devel
@@ -91,6 +91,7 @@ lua.
 
 %prep
 %setup -q
+%patch0 -p1
 rm -rf centos
 rm -rf debian
 rm -rf docker
