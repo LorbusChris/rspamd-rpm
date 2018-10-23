@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          1.7.4
+Version:          1.8.1
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv2+ and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -28,7 +28,7 @@ BuildRequires:    openssl-devel
 BuildRequires:    pcre-devel
 BuildRequires:    perl
 BuildRequires:    perl-Digest-MD5
-BuildRequires:    ragel-compat
+BuildRequires:    ragel
 BuildRequires:    systemd
 BuildRequires:    sqlite-devel
 %{?systemd_requires}
@@ -139,6 +139,7 @@ install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/override.d/
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_libdir}/systemd/system-preset/80-rspamd.preset
 install -Dpm 0644 %{SOURCE2} %{buildroot}%{_unitdir}/rspamd.service
 install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
+install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 
 %post
 %systemd_post rspamd.service
@@ -150,7 +151,7 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 %systemd_postun_with_restart rspamd.service
 
 %files
-%license LICENSE
+%license %{_docdir}/licenses/LICENSE.md
 %{_bindir}/rspamadm
 %{_bindir}/rspamc
 %{_bindir}/rspamd
@@ -161,6 +162,7 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 
 %dir %{_datadir}/%{name}/{elastic,languages}
 %{_datadir}/%{name}/{elastic,languages}/*.json
+%{_datadir}/%{name}/languages/stop_words
 
 %dir %{_datadir}/%{name}/{lua,lib,rules}
 %{_datadir}/%{name}/{lua,lib,rules}/*.lua
@@ -191,6 +193,10 @@ install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 %{_unitdir}/rspamd.service
 
 %changelog
+* Mon Oct 22 2018 Evan Klitzke <evan@eklitzke.org> - 1.8.1-1
+- Update for 1.8.1 release
+- Build now uses upstream ragel, not ragel-compat
+
 * Fri May 18 2018 patrick@pichon.me - 1.7.4
 - Updated for 1.7.4 release
 - Make hyperscan-devel only for x86_64 architecure for which the package exist
