@@ -1,14 +1,14 @@
 Name:             rspamd
-Version:          1.8.1
+Version:          1.8.3
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
-License:          ASL 2.0 and LGPLv2+ and LGPLv3 and BSD and MIT and CC0 and zlib
+License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
 Source0:          https://github.com/vstakhov/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
-#Source4:          rspamd-sysusers.conf
+Source4:          rspamd.sysusers
 Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
@@ -19,30 +19,38 @@ BuildRequires:    gmime-devel
 %ifarch x86_64
 BuildRequires:    hyperscan-devel
 %endif
+BuildRequires:    jemalloc-devel
 BuildRequires:    libaio-devel
 BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
+BuildRequires:    libunwind-devel
+%ifarch ppc64 ppc64le
+BuildRequires:    lua-devel
+%else
 BuildRequires:    luajit-devel
+%endif
 BuildRequires:    openssl-devel
 BuildRequires:    pcre-devel
 BuildRequires:    perl
 BuildRequires:    perl-Digest-MD5
 BuildRequires:    ragel
-BuildRequires:    systemd
+BuildRequires:    systemd-rpm-macros
 BuildRequires:    sqlite-devel
 %{?systemd_requires}
-Requires(pre):    shadow-utils
 Requires:         logrotate
 
 # Bundled dependencies
-# TODO: Add explicit bundled lib versions
 # TODO: Check for bundled js libs
+# TODO: Add explicit bundled lib versions where known
+# TODO: Unbundle deps where possible
 # TODO: Double-check Provides
 # aho-corasick: LGPL-3.0
 Provides: bundled(aho-corasick)
 # cdb: Public Domain
 Provides: bundled(cdb) = 1.1.0
+# hiredis: BSD-3-Clause
+Provides: bundled(hiredis) = 0.13.3
 # lc-btrie: BSD-3-Clause
 Provides: bundled(lc-btrie)
 # libottery: CC0
@@ -51,32 +59,30 @@ Provides: bundled(libottery)
 Provides: bundled(librdns)
 # libucl: BSD-2-Clause
 Provides: bundled(libucl)
-# moses: MIT
-Provides: bundled(moses)
+# linenoise: BSD-2-Clause
+Provides: bundled(linenoise) = 1.0
+# lua-argparse: MIT
+Provides: bundled(lua-argparse)
+# lua-fun: MIT
+Provides: bundled(lua-fun)
+# lua-lpeg: MIT
+Provides: bundled(lua-lpeg) = 1.0
+# lua-moses: MIT
+Provides: bundled(lua-moses)
+# lua-tableshape: MIT
+Provides: bundled(lua-tableshape) = ae67256
+# lua-torch: Apache-2.0 or BSD-3-Clause
+Provides: bundled(lua-torch)
 # mumhash: MIT
 Provides: bundled(mumhash)
 # ngx-http-parser: MIT
 Provides: bundled(ngx-http-parser) = 2.2.0
+# perl-Mozilla-PublicSuffix: MIT
+Provides: bundled(perl-Mozilla-PublicSuffix)
 # snowball: BSD-3-Clause
 Provides: bundled(snowball)
 # t1ha: Zlib
 Provides: bundled(t1ha)
-# torch: Apache-2.0 or BSD-3-Clause
-Provides: bundled(torch)
-
-# TODO: If unpatched, un-bundle the following:
-# hiredis: BSD-3-Clause
-Provides: bundled(hiredis) = 0.13.3
-# lgpl: LGPL-2.1
-Provides: bundled(lgpl)
-# linenoise: BSD-2-Clause
-Provides: bundled(linenoise) = 1.0
-# lua-lpeg: MIT
-Provides: bundled(lpeg) = 1.0
-# lua-fun: MIT
-Provides: bundled(lua-fun)
-# perl-Mozilla-PublicSuffix: MIT
-Provides: bundled(perl-Mozilla-PublicSuffix)
 # uthash: BSD
 Provides: bundled(uthash) = 1.9.8
 # xxhash: BSD
@@ -98,47 +104,46 @@ rm -rf docker
 rm -rf freebsd
 
 %build
-# TODO: Investigate, do we want DEBIAN_BUILD=1? Any other improvements?
+# NOTE: To disable tests during build, set DEBIAN_BUILD=1 option
 %cmake \
+  -DDEBIAN_BUILD=0 \
   -DCONFDIR=%{_sysconfdir}/%{name} \
   -DMANDIR=%{_mandir} \
   -DDBDIR=%{_sharedstatedir}/%{name} \
-  -DRUNDIR=%{_localstatedir}/run \
-  -DWANT_SYSTEMD_UNITS=ON \
-  -DSYSTEMDDIR=%{_unitdir} \
-  -DENABLE_LUAJIT=ON \
-  -DENABLE_HIREDIS=ON \
-  -DENABLE_FANN=ON \
-  -DENABLE_HYPERSCAN=ON \
-  -DHYPERSCAN_ROOT_DIR=/opt/hyperscan \
+  -DRUNDIR=%{_localstatedir}/run/%{name} \
   -DLOGDIR=%{_localstatedir}/log/%{name} \
   -DPLUGINSDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
+  -DSYSTEMDDIR=%{_unitdir} \
+  -DENABLE_FANN=ON \
+  -DENABLE_HIREDIS=ON \
+%ifarch x86_64
+  -DENABLE_HYPERSCAN=ON \
+%endif
+  -DENABLE_JEMALLOC=ON \
+  -DENABLE_LIBUNWIND=ON \
+%ifarch ppc64 ppc64le
+  -DENABLE_LUAJIT=OFF \
+  -DENABLE_TORCH=OFF \
+%endif
+  -DHYPERSCAN_ROOT_DIR=/opt/hyperscan \
   -DNO_SHARED=ON \
-  -DDEBIAN_BUILD=1 \
   -DRSPAMD_USER=%{name} \
   -DRSPAMD_GROUP=%{name}
 
-%check
-# TODO: Run Tests
-
 %pre
-getent group rspamd >/dev/null || groupadd -r rspamd
-getent passwd rspamd >/dev/null || \
-    useradd -r -g rspamd -d %{_sharedstatedir}/rspamd -s /sbin/nologin \
-    -c "Rspamd user" rspamd
-exit 0
+%sysusers_create_package %{name} %{SOURCE4}
 
 %install
 %{make_install} DESTDIR=%{buildroot} INSTALLDIRS=vendor
-rm %{buildroot}%{_unitdir}/rspamd.service
-install -dpm 0755 %{buildroot}%{_localstatedir}/log/%{name}
-install -dpm 0755 %{buildroot}%{_sharedstatedir}/%{name}
-install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/local.d/
-install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/override.d/
+# The tests install some files we don't want so ship
+rm -f %{buildroot}%{_bindir}/rspam{adm,c,d}-%{version}
+rm -f %{buildroot}%{_libdir}/debug/usr/bin/rspam*
+install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_libdir}/systemd/system-preset/80-rspamd.preset
 install -Dpm 0644 %{SOURCE2} %{buildroot}%{_unitdir}/rspamd.service
 install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
+install -Dpm 0644 %{SOURCE4} %{buildroot}%{_sysusersdir}/%{name}.conf
 install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 
 %post
@@ -151,6 +156,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %systemd_postun_with_restart rspamd.service
 
 %files
+# TODO: Collect licenses from all bundled dependencies
 %license %{_docdir}/licenses/LICENSE.md
 %{_bindir}/rspamadm
 %{_bindir}/rspamc
@@ -179,20 +185,28 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
 %{_libdir}/systemd/system-preset/80-rspamd.preset
-%attr(-, rspamd, rspamd) %dir %{_localstatedir}/log/%{name}
 %{_mandir}/man1/rspamadm.*
 %{_mandir}/man1/rspamc.*
 %{_mandir}/man8/rspamd.*
-%attr(-, rspamd, rspamd) %dir %{_sharedstatedir}/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/rspamd
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/*.inc
 %dir %{_sysconfdir}/%{name}/{local,modules,override,scores}.d
 %config(noreplace) %{_sysconfdir}/%{name}/{modules,scores}.d/*
-%{_unitdir}/rspamd.service
+%{_unitdir}/%{name}.service
+%{_sysusersdir}/%{name}.conf
 
 %changelog
+* Thu Dec 20 2018 Christian Glombek <lorbus@fedoraproject.org> - 1.8.3-1
+- Update to 1.8.3
+- Use sysusers config and %%sysusers_create_package macro for user creation
+- Added libunwind and jemalloc build dependencies
+- Enabled builds for ppc arches without luajit availability
+- Turned on testing during build
+- Disabled install of service unit from upstream repo
+- Manage local and shared state dirs with systemd service unit
+
 * Mon Oct 22 2018 Evan Klitzke <evan@eklitzke.org> - 1.8.1-1
 - Update for 1.8.1 release
 - Build now uses upstream ragel, not ragel-compat
