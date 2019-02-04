@@ -140,7 +140,7 @@ rm -rf freebsd
 rm -f %{buildroot}%{_bindir}/rspam{adm,c,d}-%{version}
 rm -f %{buildroot}%{_libdir}/debug/usr/bin/rspam*
 install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
-install -Dpm 0644 %{SOURCE1} %{buildroot}%{_libdir}/systemd/system-preset/80-rspamd.preset
+install -Dpm 0644 %{SOURCE1} %{buildroot}%{_presetdir}/80-rspamd.preset
 install -Dpm 0644 %{SOURCE2} %{buildroot}%{_unitdir}/rspamd.service
 install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 install -Dpm 0644 %{SOURCE4} %{buildroot}%{_sysusersdir}/%{name}.conf
@@ -184,7 +184,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
-%{_libdir}/systemd/system-preset/80-rspamd.preset
+%{_presetdir}/80-rspamd.preset
 %{_mandir}/man1/rspamadm.*
 %{_mandir}/man1/rspamc.*
 %{_mandir}/man8/rspamd.*
@@ -198,6 +198,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Wed Jan 30 2019 Ajay Ramaswamy <ajayr@krithika.net> - 1.8.3-2
+- use proper macro for systemd preset file
+
 * Thu Dec 20 2018 Christian Glombek <lorbus@fedoraproject.org> - 1.8.3-1
 - Update to 1.8.3
 - Use sysusers config and %%sysusers_create_package macro for user creation
