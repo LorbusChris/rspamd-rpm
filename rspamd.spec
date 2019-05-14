@@ -130,6 +130,7 @@ rm -rf freebsd
   -DNO_SHARED=ON \
   -DRSPAMD_USER=%{name} \
   -DRSPAMD_GROUP=%{name}
+%make_build
 
 %pre
 %sysusers_create_package %{name} %{SOURCE4}
