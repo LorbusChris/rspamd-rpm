@@ -138,7 +138,6 @@ rm -rf freebsd
 %install
 %{make_install} DESTDIR=%{buildroot} INSTALLDIRS=vendor
 # The tests install some files we don't want so ship
-rm -f %{buildroot}%{_bindir}/rspam{adm,c,d}-%{version}
 rm -f %{buildroot}%{_libdir}/debug/usr/bin/rspam*
 install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_presetdir}/80-rspamd.preset
@@ -159,9 +158,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %files
 # TODO: Collect licenses from all bundled dependencies
 %license %{_docdir}/licenses/LICENSE.md
-%{_bindir}/rspamadm
-%{_bindir}/rspamc
-%{_bindir}/rspamd
+%{_bindir}/rspam{adm,c,d}{,-%{version}}
 %{_bindir}/rspamd_stats
 
 %dir %{_datadir}/%{name}
