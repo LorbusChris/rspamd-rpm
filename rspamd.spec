@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          1.8.3
+Version:          1.9.4
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -112,7 +112,7 @@ rm -rf freebsd
   -DDBDIR=%{_sharedstatedir}/%{name} \
   -DRUNDIR=%{_localstatedir}/run/%{name} \
   -DLOGDIR=%{_localstatedir}/log/%{name} \
-  -DPLUGINSDIR=%{_datadir}/%{name} \
+  -DSHAREDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
   -DSYSTEMDDIR=%{_unitdir} \
   -DENABLE_FANN=ON \
@@ -168,11 +168,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_datadir}/%{name}/{elastic,languages}/*.json
 %{_datadir}/%{name}/languages/stop_words
 
-%dir %{_datadir}/%{name}/{lua,lib,rules}
-%{_datadir}/%{name}/{lua,lib,rules}/*.lua
+%dir %{_datadir}/%{name}/{lualib,plugins,rules}
+%{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lib/{decisiontree,nn,optim,paths,rspamadm,torch}
-%{_datadir}/%{name}/lib/{decisiontree,nn,optim,paths,rspamadm,torch}/*.lua
+%dir %{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}
+%{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
@@ -196,6 +196,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Sun Jul 28 2019 Christian Glombek <lorbus@fedoraproject.org> - 1.9.4-1
+- Update to 1.9.4
+- Keep versioned symlinks (Evan Klitzke)
+- Run make_build macro in build section (Evan Klitzke)
+
 * Wed Jan 30 2019 Ajay Ramaswamy <ajayr@krithika.net> - 1.8.3-2
 - use proper macro for systemd preset file
 
