@@ -1,6 +1,6 @@
 Name:             rspamd
 Version:          1.9.4
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -12,15 +12,15 @@ Source4:          rspamd.sysusers
 Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
-BuildRequires:    fann-devel
 BuildRequires:    file-devel
+BuildRequires:    gd-devel
 BuildRequires:    glib2-devel
-BuildRequires:    gmime-devel
 %ifarch x86_64
 BuildRequires:    hyperscan-devel
 %endif
 BuildRequires:    jemalloc-devel
 BuildRequires:    libaio-devel
+BuildRequires:    libcurl-devel
 BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
@@ -30,8 +30,9 @@ BuildRequires:    lua-devel
 %else
 BuildRequires:    luajit-devel
 %endif
+BuildRequires:    openblas-devel
 BuildRequires:    openssl-devel
-BuildRequires:    pcre-devel
+BuildRequires:    pcre2-devel
 BuildRequires:    perl
 BuildRequires:    perl-Digest-MD5
 BuildRequires:    ragel
@@ -115,8 +116,7 @@ rm -rf freebsd
   -DSHAREDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
   -DSYSTEMDDIR=%{_unitdir} \
-  -DENABLE_FANN=ON \
-  -DENABLE_HIREDIS=ON \
+  -DENABLE_GD=ON \
 %ifarch x86_64
   -DENABLE_HYPERSCAN=ON \
 %endif
@@ -126,8 +126,8 @@ rm -rf freebsd
   -DENABLE_LUAJIT=OFF \
   -DENABLE_TORCH=OFF \
 %endif
-  -DHYPERSCAN_ROOT_DIR=/opt/hyperscan \
-  -DNO_SHARED=ON \
+  -DENABLE_PCRE2=ON \
+  -DENABLE_URL_INCLUDE=ON \
   -DRSPAMD_USER=%{name} \
   -DRSPAMD_GROUP=%{name}
 %make_build
@@ -196,6 +196,15 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Fri Aug 02 2019 Felix Kaechele <heffer@fedoraproject.org> - 1.9.4-2
+- remove fann BR, deprecated in favor of torch
+- add gd support
+- remove gmime BR, it's unused
+- add libcurl, enables the use of UCL URL includes
+- add openblas support for enhanced regex performance
+- switch to pcre2 for enhanced regex performance
+- drop some unused defines in the cmake call
+
 * Sun Jul 28 2019 Christian Glombek <lorbus@fedoraproject.org> - 1.9.4-1
 - Update to 1.9.4
 - Keep versioned symlinks (Evan Klitzke)
