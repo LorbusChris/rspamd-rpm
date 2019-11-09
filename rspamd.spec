@@ -24,6 +24,7 @@ BuildRequires:    libcurl-devel
 BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
+BuildRequires:    libsodium-devel
 BuildRequires:    libunwind-devel
 %ifarch ppc64 ppc64le
 BuildRequires:    lua-devel
