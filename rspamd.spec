@@ -172,8 +172,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}
-%{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}/*.lua
+%dir %{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_magic,lua_scanners,lua_selectors,optim,paths,rspamadm,torch}
+%{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_magic,lua_scanners,lua_selectors,optim,paths,rspamadm,torch}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
@@ -189,8 +189,10 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_mandir}/man8/rspamd.*
 %config(noreplace) %{_sysconfdir}/logrotate.d/rspamd
 %dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/maps.d
 %config(noreplace) %{_sysconfdir}/%{name}/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/*.inc
+%config(noreplace) %{_sysconfdir}/%{name}/maps.d/*.inc
 %dir %{_sysconfdir}/%{name}/{local,modules,override,scores}.d
 %config(noreplace) %{_sysconfdir}/%{name}/{modules,scores}.d/*
 %{_unitdir}/%{name}.service
