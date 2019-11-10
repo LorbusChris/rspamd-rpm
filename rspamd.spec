@@ -172,8 +172,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_magic,lua_scanners,lua_selectors,optim,paths,rspamadm,torch}
-%{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_magic,lua_scanners,lua_selectors,optim,paths,rspamadm,torch}/*.lua
+%dir %{_datadir}/%{name}/lualib/{lua_magic,lua_scanners,lua_selectors,rspamadm}
+%{_datadir}/%{name}/lualib/{lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
