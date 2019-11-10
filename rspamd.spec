@@ -4,7 +4,7 @@ Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
-Source0:          https://github.com/%{name}/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:          https://github.com/%{name}/%{name}/archive/%{version}.tar.gz
 Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
@@ -172,8 +172,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{lua_magic,lua_scanners,lua_selectors,rspamadm}
-%{_datadir}/%{name}/lualib/{lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
+%dir %{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}
+%{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
