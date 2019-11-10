@@ -52,6 +52,8 @@ Provides: bundled(aho-corasick)
 Provides: bundled(cdb) = 1.1.0
 # hiredis: BSD-3-Clause
 Provides: bundled(hiredis) = 0.13.3
+# kann: MIT
+Provides: bundled(kann)
 # lc-btrie: BSD-3-Clause
 Provides: bundled(lc-btrie)
 # libev: BSD-2-Clause
