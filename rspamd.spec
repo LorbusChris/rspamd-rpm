@@ -21,7 +21,6 @@ BuildRequires:    hyperscan-devel
 BuildRequires:    jemalloc-devel
 BuildRequires:    libaio-devel
 BuildRequires:    libcurl-devel
-BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
 BuildRequires:    libsodium-devel
@@ -55,6 +54,8 @@ Provides: bundled(cdb) = 1.1.0
 Provides: bundled(hiredis) = 0.13.3
 # lc-btrie: BSD-3-Clause
 Provides: bundled(lc-btrie)
+# libev: BSD-2-Clause
+Provides: bundled(libev)
 # libottery: CC0
 Provides: bundled(libottery)
 # librdns: BSD-2-Clause
