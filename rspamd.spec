@@ -62,26 +62,28 @@ Provides: bundled(libottery)
 Provides: bundled(librdns)
 # libucl: BSD-2-Clause
 Provides: bundled(libucl)
-# linenoise: BSD-2-Clause
-Provides: bundled(linenoise) = 1.0
 # lua-argparse: MIT
 Provides: bundled(lua-argparse)
+# lua-bit: MIT
+Provides: bundled(lua-bit)
 # lua-fun: MIT
 Provides: bundled(lua-fun)
 # lua-lpeg: MIT
 Provides: bundled(lua-lpeg) = 1.0
+# lua-lupa: MIT
+Provides: bundled(lua-lupa)
 # lua-moses: MIT
 Provides: bundled(lua-moses)
 # lua-tableshape: MIT
 Provides: bundled(lua-tableshape) = ae67256
-# lua-torch: Apache-2.0 or BSD-3-Clause
-Provides: bundled(lua-torch)
 # mumhash: MIT
 Provides: bundled(mumhash)
 # ngx-http-parser: MIT
 Provides: bundled(ngx-http-parser) = 2.2.0
 # perl-Mozilla-PublicSuffix: MIT
 Provides: bundled(perl-Mozilla-PublicSuffix)
+# replxx: BSD-3-Clause
+Provides: bundled(replxx)
 # snowball: BSD-3-Clause
 Provides: bundled(snowball)
 # t1ha: Zlib
@@ -204,6 +206,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 - Update to 2.1
 - Added BuildRequire for libsodium
 - Updated Source URL
+- Replace libevent with bundled libev
+- Updated bundled Provides for version 2.1
 
 * Fri Aug 02 2019 Felix Kaechele <heffer@fedoraproject.org> - 1.9.4-2
 - remove fann BR, deprecated in favor of torch
