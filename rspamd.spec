@@ -1,10 +1,10 @@
 Name:             rspamd
-Version:          1.9.4
-Release:          2%{?dist}
+Version:          2.1
+Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
-Source0:          https://github.com/vstakhov/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:          https://github.com/%{name}/%{name}/archive/%{version}.tar.gz
 Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
@@ -21,9 +21,9 @@ BuildRequires:    hyperscan-devel
 BuildRequires:    jemalloc-devel
 BuildRequires:    libaio-devel
 BuildRequires:    libcurl-devel
-BuildRequires:    libevent-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
+BuildRequires:    libsodium-devel
 BuildRequires:    libunwind-devel
 %ifarch ppc64 ppc64le
 BuildRequires:    lua-devel
@@ -52,34 +52,40 @@ Provides: bundled(aho-corasick)
 Provides: bundled(cdb) = 1.1.0
 # hiredis: BSD-3-Clause
 Provides: bundled(hiredis) = 0.13.3
+# kann: MIT
+Provides: bundled(kann)
 # lc-btrie: BSD-3-Clause
 Provides: bundled(lc-btrie)
+# libev: BSD-2-Clause
+Provides: bundled(libev)
 # libottery: CC0
 Provides: bundled(libottery)
 # librdns: BSD-2-Clause
 Provides: bundled(librdns)
 # libucl: BSD-2-Clause
 Provides: bundled(libucl)
-# linenoise: BSD-2-Clause
-Provides: bundled(linenoise) = 1.0
 # lua-argparse: MIT
 Provides: bundled(lua-argparse)
+# lua-bit: MIT
+Provides: bundled(lua-bit)
 # lua-fun: MIT
 Provides: bundled(lua-fun)
 # lua-lpeg: MIT
 Provides: bundled(lua-lpeg) = 1.0
+# lua-lupa: MIT
+Provides: bundled(lua-lupa)
 # lua-moses: MIT
 Provides: bundled(lua-moses)
 # lua-tableshape: MIT
 Provides: bundled(lua-tableshape) = ae67256
-# lua-torch: Apache-2.0 or BSD-3-Clause
-Provides: bundled(lua-torch)
 # mumhash: MIT
 Provides: bundled(mumhash)
 # ngx-http-parser: MIT
 Provides: bundled(ngx-http-parser) = 2.2.0
 # perl-Mozilla-PublicSuffix: MIT
 Provides: bundled(perl-Mozilla-PublicSuffix)
+# replxx: BSD-3-Clause
+Provides: bundled(replxx)
 # snowball: BSD-3-Clause
 Provides: bundled(snowball)
 # t1ha: Zlib
@@ -171,8 +177,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}
-%{_datadir}/%{name}/lualib/{decisiontree,nn,lua_ffi,lua_scanners,optim,paths,rspamadm,torch}/*.lua
+%dir %{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}
+%{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
@@ -188,14 +194,23 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_mandir}/man8/rspamd.*
 %config(noreplace) %{_sysconfdir}/logrotate.d/rspamd
 %dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/maps.d
 %config(noreplace) %{_sysconfdir}/%{name}/*.conf
 %config(noreplace) %{_sysconfdir}/%{name}/*.inc
+%config(noreplace) %{_sysconfdir}/%{name}/maps.d/*.inc
 %dir %{_sysconfdir}/%{name}/{local,modules,override,scores}.d
 %config(noreplace) %{_sysconfdir}/%{name}/{modules,scores}.d/*
 %{_unitdir}/%{name}.service
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Sat Nov 09 2019 Johan Kok <johan@fedoraproject.org> - 2.1-1
+- Update to 2.1
+- Added BuildRequire for libsodium
+- Updated Source URL
+- Replace libevent with bundled libev
+- Updated bundled Provides for version 2.1
+
 * Fri Aug 02 2019 Felix Kaechele <heffer@fedoraproject.org> - 1.9.4-2
 - remove fann BR, deprecated in favor of torch
 - add gd support
