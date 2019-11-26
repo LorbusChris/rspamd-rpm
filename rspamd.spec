@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          2.1
+Version:          2.2
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -204,6 +204,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Tue Nov 26 2019 Johan Kok <johan@fedoraproject.org> - 2.2-1
+- Update to 2.2
+
 * Sat Nov 09 2019 Johan Kok <johan@fedoraproject.org> - 2.1-1
 - Update to 2.1
 - Added BuildRequire for libsodium
