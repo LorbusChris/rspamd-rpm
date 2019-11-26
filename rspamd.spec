@@ -50,6 +50,8 @@ Requires:         logrotate
 Provides: bundled(aho-corasick)
 # cdb: Public Domain
 Provides: bundled(cdb) = 1.1.0
+# fastutf8: MIT
+Provides: bundled(fastutf8)
 # hiredis: BSD-3-Clause
 Provides: bundled(hiredis) = 0.13.3
 # kann: MIT
@@ -206,6 +208,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %changelog
 * Tue Nov 26 2019 Johan Kok <johan@fedoraproject.org> - 2.2-1
 - Update to 2.2
+- Added bundled Provides for fastutf8
 
 * Sat Nov 09 2019 Johan Kok <johan@fedoraproject.org> - 2.1-1
 - Update to 2.1
