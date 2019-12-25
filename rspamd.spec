@@ -1,6 +1,6 @@
 Name:             rspamd
 Version:          2.2
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -13,7 +13,6 @@ Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
 BuildRequires:    file-devel
-BuildRequires:    gd-devel
 BuildRequires:    glib2-devel
 %ifarch x86_64
 BuildRequires:    hyperscan-devel
@@ -124,7 +123,6 @@ rm -rf freebsd
   -DSHAREDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
   -DSYSTEMDDIR=%{_unitdir} \
-  -DENABLE_GD=ON \
 %ifarch x86_64
   -DENABLE_HYPERSCAN=ON \
 %endif
@@ -132,10 +130,8 @@ rm -rf freebsd
   -DENABLE_LIBUNWIND=ON \
 %ifarch ppc64 ppc64le
   -DENABLE_LUAJIT=OFF \
-  -DENABLE_TORCH=OFF \
 %endif
   -DENABLE_PCRE2=ON \
-  -DENABLE_URL_INCLUDE=ON \
   -DRSPAMD_USER=%{name} \
   -DRSPAMD_GROUP=%{name}
 %make_build
@@ -206,6 +202,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Wed Dec 25 2019 Christian Glombek <lorbus@fedoraproject.org> - 2.2-2
+- Remove untested and experimental GD support
+- Remove torch related things as they are no longer part of Rspamd
+- Remove untested URL_INCLUDE feature
+
 * Tue Nov 26 2019 Johan Kok <johan@fedoraproject.org> - 2.2-1
 - Update to 2.2
 - Added bundled Provides for fastutf8
