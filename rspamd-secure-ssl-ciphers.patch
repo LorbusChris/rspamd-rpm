@@ -1,13 +1,13 @@
-diff -ru a/src/libutil/util.c b/src/libutil/util.c
-index b6057f0..22f93d1 100644
+diff --git a/src/libutil/util.c b/src/libutil/util.c
+index 3256becb9..f74f315b3 100644
 --- a/src/libutil/util.c
 +++ b/src/libutil/util.c
-@@ -2125,7 +2125,7 @@ void
+@@ -2436,7 +2436,7 @@ gboolean
  rspamd_config_libs (struct rspamd_external_libs_ctx *ctx,
  		struct rspamd_config *cfg)
  {
 -	static const char secure_ciphers[] = "HIGH:!aNULL:!kRSA:!PSK:!SRP:!MD5:!RC4";
 +	static const char secure_ciphers[] = "PROFILE=SYSTEM";
  	size_t r;
+ 	gboolean ret = TRUE;
  
- 	g_assert (cfg != NULL);
