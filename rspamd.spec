@@ -1,15 +1,16 @@
 Name:             rspamd
-Version:          2.2
-Release:          2%{?dist}
+Version:          2.4
+Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
-Source0:          https://github.com/%{name}/%{name}/archive/%{version}.tar.gz
+Source0:          https://github.com/%{name}/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
 Patch0:           rspamd-secure-ssl-ciphers.patch
+Patch1:           rspamd-fix-replxx-compile.patch
 
 BuildRequires:    cmake
 BuildRequires:    file-devel
@@ -104,8 +105,7 @@ with big amount of mail and can be easily extended with own filters written in
 lua.
 
 %prep
-%setup -q
-%patch0 -p1
+%autosetup -p1
 rm -rf centos
 rm -rf debian
 rm -rf docker
@@ -175,8 +175,8 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}
-%{_datadir}/%{name}/lualib/{lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
+%dir %{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}
+%{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
 
 %dir %{_datadir}/%{name}/rules/regexp
 %{_datadir}/%{name}/rules/regexp/*.lua
@@ -202,6 +202,18 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Fri Mar 06 2020 Julian DeMille <me@jdemille.com> - 2.4-1
+- update to 2.4
+- integrate Felix's changes
+
+* Thu Feb 06 2020 Felix Kaechele <heffer@fedoraproject.org> - 2.3-1
+- update to 2.3
+- changed upstream URL to use a sensible filename
+- add lua_content directory
+- use %%autosetup macro
+- refresh ciphers patch
+- add replxx compile fix patch
+
 * Wed Dec 25 2019 Christian Glombek <lorbus@fedoraproject.org> - 2.2-2
 - Remove untested and experimental GD support
 - Remove torch related things as they are no longer part of Rspamd
