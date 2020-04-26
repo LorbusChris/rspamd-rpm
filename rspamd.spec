@@ -10,7 +10,6 @@ Source2:          rspamd.service
 Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
 Patch0:           rspamd-secure-ssl-ciphers.patch
-Patch1:           rspamd-fix-replxx-compile.patch
 
 BuildRequires:    cmake
 BuildRequires:    file-devel
@@ -204,6 +203,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %changelog
 * Sat Apr 25 2020 Johan Kok <johan@fedoraproject.org> - 2.5-1
 - Update to 2.5
+- Removed replxx compile fix patch
 
 * Fri Mar 06 2020 Julian DeMille <me@jdemille.com> - 2.4-1
 - update to 2.4
