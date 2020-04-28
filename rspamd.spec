@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          2.4
+Version:          2.5
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -202,6 +202,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Sat Apr 25 2020 Johan Kok <johan@fedoraproject.org> - 2.5-1
+- Update to 2.5
+
 * Fri Mar 06 2020 Julian DeMille <me@jdemille.com> - 2.4-1
 - update to 2.4
 - integrate Felix's changes
