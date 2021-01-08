@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          2.5
+Version:          2.7
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -10,7 +10,6 @@ Source2:          rspamd.service
 Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
 Patch0:           rspamd-secure-ssl-ciphers.patch
-Patch1:           rspamd-fix-replxx-compile.patch
 
 BuildRequires:    cmake
 BuildRequires:    file-devel
@@ -175,11 +174,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
 
-%dir %{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}
-%{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,rspamadm}/*.lua
+%dir %{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,plugins,rspamadm}
+%{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,plugins,rspamadm}/*.lua
 
-%dir %{_datadir}/%{name}/rules/regexp
-%{_datadir}/%{name}/rules/regexp/*.lua
+%dir %{_datadir}/%{name}/rules/{controller,regexp}
+%{_datadir}/%{name}/rules/{controller,regexp}/*.lua
 
 %dir %{_datadir}/%{name}/www
 %{_datadir}/%{name}/www/*
@@ -202,6 +201,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Fri Jan 08 2021 Johan Kok <johan@fedoraproject.org> - 2.7-1
+- Update to 2.7
+- Updated ssl ciphers patch
+- Removed replxx compile patch
+
 * Sat Apr 25 2020 Johan Kok <johan@fedoraproject.org> - 2.5-1
 - Update to 2.5
 
