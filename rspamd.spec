@@ -133,13 +133,13 @@ rm -rf freebsd
   -DENABLE_PCRE2=ON \
   -DRSPAMD_USER=%{name} \
   -DRSPAMD_GROUP=%{name}
-%make_build
+%cmake_build
 
 %pre
 %sysusers_create_package %{name} %{SOURCE4}
 
 %install
-%{make_install} DESTDIR=%{buildroot} INSTALLDIRS=vendor
+%cmake_install
 # The tests install some files we don't want so ship
 rm -f %{buildroot}%{_libdir}/debug/usr/bin/rspam*
 install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
@@ -203,6 +203,7 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %changelog
 * Fri Jan 08 2021 Johan Kok <johan@fedoraproject.org> - 2.7-1
 - Update to 2.7
+- Updated cmake rpm macros
 - Updated ssl ciphers patch
 - Removed replxx compile patch
 
