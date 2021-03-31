@@ -49,6 +49,9 @@ Requires:         logrotate
 Provides: bundled(aho-corasick)
 # cdb: Public Domain
 Provides: bundled(cdb) = 1.1.0
+# google-ced: Apache License v2
+# ced = "Compact Encoding Detection", https://github.com/google/compact_enc_det
+Provides: bundled(compact_enc_det) = 37529e6
 # fastutf8: MIT
 Provides: bundled(fastutf8)
 # hiredis: BSD-3-Clause
@@ -58,7 +61,7 @@ Provides: bundled(kann)
 # lc-btrie: BSD-3-Clause
 Provides: bundled(lc-btrie)
 # libev: BSD-2-Clause
-Provides: bundled(libev)
+Provides: bundled(libev) = 4.33
 # libottery: CC0
 Provides: bundled(libottery)
 # librdns: BSD-2-Clause
@@ -66,9 +69,9 @@ Provides: bundled(librdns)
 # libucl: BSD-2-Clause
 Provides: bundled(libucl)
 # lua-argparse: MIT
-Provides: bundled(lua-argparse)
+Provides: bundled(lua-argparse) = 0.7.0
 # lua-bit: MIT
-Provides: bundled(lua-bit)
+Provides: bundled(lua-bit) = 1.0.2
 # lua-fun: MIT
 Provides: bundled(lua-fun)
 # lua-lpeg: MIT
@@ -86,7 +89,7 @@ Provides: bundled(ngx-http-parser) = 2.2.0
 # perl-Mozilla-PublicSuffix: MIT
 Provides: bundled(perl-Mozilla-PublicSuffix)
 # replxx: BSD-3-Clause
-Provides: bundled(replxx)
+Provides: bundled(replxx) = 0.0.2
 # snowball: BSD-3-Clause
 Provides: bundled(snowball)
 # t1ha: Zlib
@@ -96,7 +99,7 @@ Provides: bundled(uthash) = 1.9.8
 # xxhash: BSD
 Provides: bundled(xxhash)
 # zstd: BSD
-Provides: bundled(zstd) = 1.3.1
+Provides: bundled(zstd) = 1.4.5
 
 %description
 Rspamd is a rapid, modular and lightweight spam filter. It is designed to work
