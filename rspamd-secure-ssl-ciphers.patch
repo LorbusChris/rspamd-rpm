@@ -1,5 +1,5 @@
 diff --git a/src/libserver/ssl_util.c b/src/libserver/ssl_util.c
-index 995d46cc6..a75fd888d 100644
+index c01f7467f..aafbb0826 100644
 --- a/src/libserver/ssl_util.c
 +++ b/src/libserver/ssl_util.c
 @@ -1076,7 +1076,7 @@ void
@@ -11,10 +11,10 @@ index 995d46cc6..a75fd888d 100644
  
  	if (cfg->ssl_ca_path) {
  		if (SSL_CTX_load_verify_locations (ctx->s, cfg->ssl_ca_path,
-@@ -1111,4 +1111,4 @@ rspamd_ssl_ctx_free (gpointer ssl_ctx)
- 
+@@ -1112,4 +1112,4 @@ rspamd_ssl_ctx_free (gpointer ssl_ctx)
  	rspamd_lru_hash_destroy (ctx->sessions);
  	SSL_CTX_free (ctx->s);
+ 	g_free (ssl_ctx);
 -}
 \ No newline at end of file
 +}
