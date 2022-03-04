@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          2.7
+Version:          3.1
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -38,6 +38,7 @@ BuildRequires:    ragel
 BuildRequires:    systemd-rpm-macros
 BuildRequires:    sqlite-devel
 %{?systemd_requires}
+%{?sysusers_requires_compat}
 Requires:         logrotate
 
 # Bundled dependencies
@@ -134,12 +135,11 @@ rm -rf freebsd
   -DENABLE_LUAJIT=OFF \
 %endif
   -DENABLE_PCRE2=ON \
-  -DRSPAMD_USER=%{name} \
-  -DRSPAMD_GROUP=%{name}
+  -DRSPAMD_USER=%{name}
 %cmake_build
 
 %pre
-%sysusers_create_package %{name} %{SOURCE4}
+%sysusers_create_compat %{SOURCE4}
 
 %install
 %cmake_install
@@ -166,26 +166,19 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %license %{_docdir}/licenses/LICENSE.md
 %{_bindir}/rspam{adm,c,d}{,-%{version}}
 %{_bindir}/rspamd_stats
-
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/effective_tld_names.dat
-
 %dir %{_datadir}/%{name}/{elastic,languages}
 %{_datadir}/%{name}/{elastic,languages}/*.json
 %{_datadir}/%{name}/languages/stop_words
-
 %dir %{_datadir}/%{name}/{lualib,plugins,rules}
 %{_datadir}/%{name}/{lualib,plugins,rules}/*.lua
-
 %dir %{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,plugins,rspamadm}
 %{_datadir}/%{name}/lualib/{lua_content,lua_ffi,lua_magic,lua_scanners,lua_selectors,plugins,rspamadm}/*.lua
-
 %dir %{_datadir}/%{name}/rules/{controller,regexp}
 %{_datadir}/%{name}/rules/{controller,regexp}/*.lua
-
 %dir %{_datadir}/%{name}/www
 %{_datadir}/%{name}/www/*
-
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
 %{_presetdir}/80-rspamd.preset
@@ -204,6 +197,11 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Fri Mar 04 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-1
+- Update to 3.1
+- Fix sysusers.d file and use it according to Fedora guidelines
+  (see https://fedoraproject.org/wiki/Changes/Adopting_sysusers.d_format).
+
 * Fri Jan 08 2021 Johan Kok <johan@fedoraproject.org> - 2.7-1
 - Update to 2.7
 - Updated cmake rpm macros
