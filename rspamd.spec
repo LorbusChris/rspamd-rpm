@@ -1,6 +1,6 @@
 Name:             rspamd
 Version:          3.1
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -20,6 +20,7 @@ BuildRequires:    hyperscan-devel
 BuildRequires:    jemalloc-devel
 BuildRequires:    libaio-devel
 BuildRequires:    libcurl-devel
+BuildRequires:    fmt-devel
 BuildRequires:    libicu-devel
 BuildRequires:    libnsl2-devel
 BuildRequires:    libsodium-devel
@@ -126,6 +127,7 @@ rm -rf freebsd
   -DSHAREDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
   -DSYSTEMDDIR=%{_unitdir} \
+  -DSYSTEM_FMT=ON \
 %ifarch x86_64
   -DENABLE_HYPERSCAN=ON \
 %endif
@@ -197,6 +199,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_sysusersdir}/%{name}.conf
 
 %changelog
+* Wed Mar 09 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-2
+- Add fmt-devel build dependency
+
 * Fri Mar 04 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-1
 - Update to 3.1
 - Fix sysusers.d file and use it according to Fedora guidelines
