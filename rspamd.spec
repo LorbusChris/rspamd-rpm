@@ -1,6 +1,6 @@
 Name:             rspamd
 Version:          3.1
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -9,20 +9,20 @@ Source1:          80-rspamd.preset
 Source2:          rspamd.service
 Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
+Source5:          rspamd.tmpfilesd
 Patch0:           rspamd-secure-ssl-ciphers.patch
 
 BuildRequires:    cmake
+BuildRequires:    gcc
 BuildRequires:    file-devel
 BuildRequires:    glib2-devel
 %ifarch x86_64
 BuildRequires:    hyperscan-devel
 %endif
 BuildRequires:    jemalloc-devel
-BuildRequires:    libaio-devel
 BuildRequires:    libcurl-devel
 BuildRequires:    fmt-devel
 BuildRequires:    libicu-devel
-BuildRequires:    libnsl2-devel
 BuildRequires:    libsodium-devel
 BuildRequires:    libunwind-devel
 %ifarch ppc64 ppc64le
@@ -38,9 +38,20 @@ BuildRequires:    perl-Digest-MD5
 BuildRequires:    ragel
 BuildRequires:    systemd-rpm-macros
 BuildRequires:    sqlite-devel
+BuildRequires:    zlib-devel
 %{?systemd_requires}
 %{?sysusers_requires_compat}
+Requires:         fmt
+Requires:         hyperscan
+Requires:         jemalloc
 Requires:         logrotate
+Requires:         openblas
+%ifarch ppc64 ppc64le
+Requires:         lua
+%else
+Requires:         luajit
+%endif
+Requires:         zlib
 
 # Bundled dependencies
 # TODO: Check for bundled js libs
@@ -122,7 +133,7 @@ rm -rf freebsd
   -DCONFDIR=%{_sysconfdir}/%{name} \
   -DMANDIR=%{_mandir} \
   -DDBDIR=%{_sharedstatedir}/%{name} \
-  -DRUNDIR=%{_localstatedir}/run/%{name} \
+  -DRUNDIR=%{_rundir}/%{name} \
   -DLOGDIR=%{_localstatedir}/log/%{name} \
   -DSHAREDIR=%{_datadir}/%{name} \
   -DLIBDIR=%{_libdir}/%{name}/ \
@@ -147,11 +158,13 @@ rm -rf freebsd
 %cmake_install
 # The tests install some files we don't want so ship
 rm -f %{buildroot}%{_libdir}/debug/usr/bin/rspam*
-install -Ddpm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
+mkdir -p %{buildroot}{%{_localstatedir}/log,%{_rundir}}/%{name}/
+install -Ddm 0755 %{buildroot}%{_sysconfdir}/%{name}/{local,override}.d/
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_presetdir}/80-rspamd.preset
 install -Dpm 0644 %{SOURCE2} %{buildroot}%{_unitdir}/rspamd.service
 install -Dpm 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rspamd
 install -Dpm 0644 %{SOURCE4} %{buildroot}%{_sysusersdir}/%{name}.conf
+install -Dpm 0644 %{SOURCE5} %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 
 %post
@@ -189,16 +202,20 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %{_mandir}/man8/rspamd.*
 %config(noreplace) %{_sysconfdir}/logrotate.d/rspamd
 %dir %{_sysconfdir}/%{name}
-%dir %{_sysconfdir}/%{name}/maps.d
-%config(noreplace) %{_sysconfdir}/%{name}/*.conf
-%config(noreplace) %{_sysconfdir}/%{name}/*.inc
-%config(noreplace) %{_sysconfdir}/%{name}/maps.d/*.inc
-%dir %{_sysconfdir}/%{name}/{local,modules,override,scores}.d
-%config(noreplace) %{_sysconfdir}/%{name}/{modules,scores}.d/*
+%config(noreplace) %{_sysconfdir}/%{name}/*.{inc,conf}
+%dir %{_sysconfdir}/%{name}/{local,maps,modules,override,scores}.d
+%config(noreplace) %{_sysconfdir}/%{name}/{local,maps,modules,override,scores}.d/*
 %{_unitdir}/%{name}.service
 %{_sysusersdir}/%{name}.conf
+%{_tmpfilesdir}/%{name}.conf
+%dir %attr(0750,%{name},%{name}) %{_rundir}/%{name}
+%dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}
 
 %changelog
+* Wed Mar 09 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-3
+- Add missing runtime dependencies
+- Add log and run dirs
+
 * Wed Mar 09 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-2
 - Add fmt-devel build dependency
 
