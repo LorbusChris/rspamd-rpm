@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          3.1
+Version:          3.3
 Release:          3%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -148,6 +148,9 @@ rm -rf freebsd
   -DENABLE_LUAJIT=OFF \
 %endif
   -DENABLE_PCRE2=ON \
+%if 0%{?fedora} >= 36
+  -DLINKER_NAME=/usr/bin/ld.bfd \
+%endif
   -DRSPAMD_USER=%{name}
 %cmake_build
 
