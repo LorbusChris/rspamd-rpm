@@ -1,6 +1,6 @@
 Name:             rspamd
-Version:          3.1
-Release:          3%{?dist}
+Version:          3.3
+Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -148,6 +148,9 @@ rm -rf freebsd
   -DENABLE_LUAJIT=OFF \
 %endif
   -DENABLE_PCRE2=ON \
+%if 0%{?fedora} >= 36
+  -DLINKER_NAME=/usr/bin/ld.bfd \
+%endif
   -DRSPAMD_USER=%{name}
 %cmake_build
 
@@ -212,6 +215,10 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}
 
 %changelog
+* Mon Nov 07 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.3-1
+- update to 3.3
+- use ld.bfd to link on Fedora 36+
+
 * Wed Mar 09 2022 Christian Glombek <lorbus@fedoraproject.org> - 3.1-3
 - Add missing runtime dependencies
 - Add log and run dirs
