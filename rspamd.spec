@@ -1,5 +1,5 @@
 Name:             rspamd
-Version:          3.3
+Version:          3.4
 Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
@@ -11,6 +11,7 @@ Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
 Source5:          rspamd.tmpfilesd
 Patch0:           rspamd-secure-ssl-ciphers.patch
+Patch1:           rspamd-3.4-Deserialise_hyperscan_to_the_page-aligned_space_to_prevent_alignment_issues.patch
 
 BuildRequires:    cmake
 BuildRequires:    gcc
@@ -215,6 +216,10 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}
 
 %changelog
+* Thu Nov 17 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.4-1
+- update to 3.4
+- fix crash in hyperscan see https://github.com/rspamd/rspamd/issues/4329
+
 * Mon Nov 07 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.3-1
 - update to 3.3
 - use ld.bfd to link on Fedora 36+
