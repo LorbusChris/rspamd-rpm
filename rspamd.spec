@@ -1,6 +1,6 @@
 Name:             rspamd
 Version:          3.4
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -12,6 +12,9 @@ Source4:          rspamd.sysusers
 Source5:          rspamd.tmpfilesd
 Patch0:           rspamd-secure-ssl-ciphers.patch
 Patch1:           rspamd-3.4-Deserialise_hyperscan_to_the_page-aligned_space_to_prevent_alignment_issues.patch
+
+# see https://bugzilla.redhat.com/show_bug.cgi?id=2043092
+%undefine _package_note_flags
 
 BuildRequires:    cmake
 BuildRequires:    gcc
@@ -149,9 +152,6 @@ rm -rf freebsd
   -DENABLE_LUAJIT=OFF \
 %endif
   -DENABLE_PCRE2=ON \
-%if 0%{?fedora} >= 36
-  -DLINKER_NAME=/usr/bin/ld.bfd \
-%endif
   -DRSPAMD_USER=%{name}
 %cmake_build
 
@@ -216,6 +216,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}
 
 %changelog
+* Fri Nov 25 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.4-2
+- fix gcc 12 linker see rhbz #2043092
+
 * Thu Nov 17 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.4-1
 - update to 3.4
 - fix crash in hyperscan see https://github.com/rspamd/rspamd/issues/4329
