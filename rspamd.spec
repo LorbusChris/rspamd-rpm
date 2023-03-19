@@ -1,6 +1,6 @@
 Name:             rspamd
-Version:          3.4
-Release:          2%{?dist}
+Version:          3.5
+Release:          1%{?dist}
 Summary:          Rapid spam filtering system
 License:          ASL 2.0 and LGPLv3 and BSD and MIT and CC0 and zlib
 URL:              https://www.rspamd.com/
@@ -11,7 +11,6 @@ Source3:          rspamd.logrotate
 Source4:          rspamd.sysusers
 Source5:          rspamd.tmpfilesd
 Patch0:           rspamd-secure-ssl-ciphers.patch
-Patch1:           rspamd-3.4-Deserialise_hyperscan_to_the_page-aligned_space_to_prevent_alignment_issues.patch
 
 # see https://bugzilla.redhat.com/show_bug.cgi?id=2043092
 %undefine _package_note_flags
@@ -216,6 +215,9 @@ install -Dpm 0644 LICENSE.md %{buildroot}%{_docdir}/licenses/LICENSE.md
 %dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}
 
 %changelog
+* Sun Mar 19 2023 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.5-1
+- update to 3.5
+
 * Wed Dec 07 2022 Ajay Ramaswamy <ajay@ramaswamy.net> - 3.4-2
 - disable package-note-flags to fix link with gcc12
   see details in rhbz #2043092
